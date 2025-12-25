@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritas AI | AI-Powered Analysis Tool</title>
+    <meta name="description"
+        content="Detect fake news with our AI-powered analysis tool that examines text, sentiment, and linguistic patterns to identify potential misinformation.">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Veritas</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" data-tab="detector"><i class="fas fa-search"></i> Detector</li>
+                    <li data-tab="history"><i class="fas fa-history"></i> History</li>
+                    <li data-tab="statistics"><i class="fas fa-chart-pie"></i> Statistics</li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="tab-content active" id="detector-tab">
+                <h1>Veritas AI</h1>
+                <p class="subtitle">Enter the news text below to check its likelihood of being fake news.</p>
+
+                <div class="input-container">
+                    <textarea id="newsText" rows="10" placeholder="Paste news article text here..."></textarea>
+                    <button id="checkButton" class="primary-btn">
+                        <i class="fas fa-magnifying-glass"></i> Analyze News
+                    </button>
+                </div>
+
+                <div id="loadingIndicator" class="loading-container">
+                    <div class="spinner"></div>
+                    <p>Analyzing text content...</p>
+                    <p>This may take a moment while we process your request.</p>
+                </div>
+
+                <!-- New web scraping loading indicator -->
+                <div id="webScrapingIndicator" class="loading-container">
+                    <div class="spinner"></div>
+                    <p><i class="fas fa-globe"></i> Scraping web for information...</p>
+                    <p>Finding relevant sources and analyzing content.</p>
+                </div>
+
+                <!-- New LLM loading indicator -->
+                <div id="llmLoadingIndicator" class="loading-container">
+                    <div class="spinner"></div>
+                    <p><i class="fas fa-brain"></i> Running AI analysis...</p>
+                    <p>Our AI model is analyzing the content for potential misinformation.</p>
+                </div>
+
+                <div id="resultArea" class="result-container">
+                    <div class="result-section" id="classificationResult">
+                        <h3><i class="fas fa-robot"></i> Classification</h3>
+                        <p><strong>Text Analyzed:</strong> <span id="analyzedText"></span>...</p>
+                        <div class="prediction-badge">
+                            <span id="prediction">Unknown</span>
+                            <span class="confidence">Confidence: <span id="probability">0</span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section" id="sentimentResult">
+                        <h3><i class="fas fa-face-smile"></i> Sentiment Analysis</h3>
+                        <p><strong>Overall Sentiment:</strong> <span id="sentimentLabel"></span> (Score: <span
+                                id="sentimentScore"></span>)</p>
+                        <div class="sentiment-meter">
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="sentimentMeter"></div>
+                            </div>
+                            <div class="meter-labels">
+                                <span>Negative</span>
+                                <span>Neutral</span>
+                                <span>Positive</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-section" id="linguisticResult">
+                        <h3><i class="fas fa-flag"></i> Linguistic Flags</h3>
+                        <ul id="linguisticFlagsList" class="feature-list"></ul>
+                    </div>
+
+                    <div class="result-section" id="similarityResult">
+                        <h3><i class="fas fa-link"></i> Similar Articles Found</h3>
+                        <div class="similar-container">
+                            <div class="similar-column">
+                                <h4><i class="fas fa-check-circle"></i> Similar True Articles</h4>
+                                <ul id="similarTrueList"></ul>
+                            </div>
+                            <div class="similar-column">
+                                <h4><i class="fas fa-times-circle"></i> Similar Fake Articles</h4>
+                                <ul id="similarFakeList"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-section" id="scrapeAnalysisResult">
+                        <h3><i class="fas fa-globe"></i> Web Search Analysis</h3>
+                        <h4>Key Themes/Keywords:</h4>
+                        <div id="scrapedKeywords" class="keywords-cloud"></div>
+                        <h4>Sources Used:</h4>
+                        <ul id="scrapedAnalysisSourcesList" class="sources-list"></ul>
+                    </div>
+
+                    <div class="result-section" id="llmResult">
+                        <h3><i class="fas fa-brain"></i> AI Analysis</h3>
+                        <p class="scientific-note"><i class="fas fa-microscope"></i> The following analysis is based on
+                            scientific research and fact-checking from reliable sources.</p>
+                        <div class="typing-animation-container">
+                            <div class="ai-loader">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <p id="llmAnalysisText" class="typing-text"></p>
+                            <div class="cursor"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-section" id="scrapingResult">
+                        <h3><i class="fas fa-search"></i> Search Results</h3>
+                        <p class="disclaimer"><em>These search results are based on the input text. Please evaluate all
+                                sources critically.</em></p>
+                        <p><strong>Search Status:</strong> <span id="scrapingStatus"></span></p>
+                        <ul id="scrapedLinksList" class="links-list"></ul>
+                    </div>
+                </div>
+
+                <div id="errorArea" class="error-container">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Error</h2>
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="history-tab">
+                <h1>Search History</h1>
+                <p class="subtitle">Your recent analysis results are saved here for future reference.</p>
+
+                <div class="history-controls">
+                    <button id="clearHistoryBtn" class="clear-history-btn"><i class="fas fa-trash"></i> Clear
+                        History</button>
+                </div>
+
+                <div id="historyList" class="history-list">
+                    <div class="empty-state">
+                        <i class="fas fa-history empty-icon"></i>
+                        <p>No history items yet. Start analyzing news to build your history.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="statistics-tab">
+                <h1>Statistics</h1>
+                <p class="subtitle">Overview of your analysis activities and trends over time.</p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Analyses</h3>
+                        <div class="stat-value" id="totalAnalyses">0</div>
+                        <i class="fas fa-search-plus stat-icon"></i>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Fake News Detected</h3>
+                        <div class="stat-value" id="fakeNewsCount">0</div>
+                        <i class="fas fa-times-circle stat-icon"></i>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Real News Verified</h3>
+                        <div class="stat-value" id="realNewsCount">0</div>
+                        <i class="fas fa-check-circle stat-icon"></i>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Average Confidence</h3>
+                        <div class="stat-value" id="avgConfidence">0%</div>
+                        <i class="fas fa-percentage stat-icon"></i>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Fake vs. Real Distribution</h3>
+                        <div class="pie-chart-container">
+                            <canvas id="resultsDistributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Sentiment Analysis Trends</h3>
+                        <div class="bar-chart-container">
+                            <canvas id="sentimentDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

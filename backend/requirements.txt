@@ -1,0 +1,19 @@
+Flask
+scikit-learn
+pandas
+joblib
+requests # For making HTTP requests (scraping)
+beautifulsoup4 # For parsing HTML (scraping)
+vaderSentiment # For lexicon-based sentiment analysis
+transformers # Hugging Face library for models
+torch # PyTorch backend for transformers
+accelerate # Helper library for PyTorch / Transformers device management
+# bitsandbytes>=0.39.0 # Optional: For 4-bit quantization on supported platforms (not Windows)
+
+# Alternate model to try (lighter than Mistral)
+# Add any other specific libraries needed for text processing or model 
+duckduckgo-search
+fastapi
+uvicorn
+pydantic
+spacy 
