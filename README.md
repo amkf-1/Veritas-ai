@@ -1,6 +1,18 @@
 # Veritas AI
 
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+
 Veritas AI is a comprehensive tool designed to identify fake news articles using a combination of machine learning (Logistic Regression + TF-IDF), sentiment analysis (VADER), and similarity search. It now includes **LLM-powered analysis** using local models (TinyLlama, Qwen, Phi-2) for deeper insights and **internet search** via DuckDuckGo to verify claims against live web sources.
+
+## Features
+
+-   **Fake News Detection**: Uses a trained Logistic Regression model to classify news as Real or Fake.
+-   **Sentiment Analysis**: Analyzes the emotional tone of the text.
+-   **Web Scraping**: Automatically verifies facts by searching for relevant articles on DuckDuckGo.
+-   **LLM Analysis**: Optional deep-dive analysis using local Large Language Models.
+-   **Docker Support**: Fully containerized for easy deployment.
 
 ## Structure
 
@@ -37,7 +49,7 @@ Veritas AI is a comprehensive tool designed to identify fake news articles using
         python train_model.py
         ```
 
-4.  **Run Application**:
+5.  **Run Application**:
     ```bash
     # Run with Uvicorn (FastAPI)
     uvicorn backend.app:app --host 0.0.0.0 --port 5001
@@ -53,8 +65,17 @@ Veritas AI is a comprehensive tool designed to identify fake news articles using
 
 2.  **Run Container**:
     ```bash
+    # Normal run
     docker run -p 5001:5001 veritas-ai
+
+    # Run with LLMs disabled (for low-memory environments)
+    docker run -p 5001:5001 -e ENABLE_LLM=false veritas-ai
     ```
+
+## Troubleshooting
+
+-   **Container Crashes (OOM)**: If the Docker container crashes immediately or during analysis, it's likely due to the Large Language Models (LLMs) running out of memory. Try running with `-e ENABLE_LLM=false`.
+-   **Port Conflicts**: If port 5001 is busy, change the `-p` flag, e.g., `-p 8080:5001`.
 
 ## Deployment
 
